@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>能理解，不支持，没能力——关于 GNU 和 GPL 之我见</title>
+  <meta name="description" content="顺便，我在这里行使一波我的言论自由 我不干涉其他人使用 GPL 的自由，但要我用，去他妈的强行自由">
+<meta property="og:type" content="article">
+<meta property="og:title" content="能理解，不支持，没能力——关于 GNU 和 GPL 之我见">
+<meta property="og:url" content="https://blog.christine.pp.ua/2022/11/18/how-i-think-about-gnu/index.html">
+<meta property="og:site_name" content="Christine 自留地">
+<meta property="og:description" content="顺便，我在这里行使一波我的言论自由 我不干涉其他人使用 GPL 的自由，但要我用，去他妈的强行自由">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/CEllenvia/studious-octo-machine/master/pics/IMG_20221016_125507_148.jpg">
+<meta property="article:published_time" content="2022-11-18T13:24:55.000Z">
+<meta property="article:modified_time" content="2022-11-18T15:19:43.463Z">
+<meta property="article:author" content="Christine Ellenvia">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/CEllenvia/studious-octo-machine/master/pics/IMG_20221016_125507_148.jpg">
+  
+  
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/@waline/client@v2/dist/waline.css"
+  />
+  
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Christine 自留地" type="application/atom+xml">
+</head>
+
+<body>
+  <div class="page">
+  <div class="title markdown-body">能理解，不支持，没能力——关于 GNU 和 GPL 之我见</div>
+  <div class="content markdown-body"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">我个人对除了 LGPL 外的所有  GNU GPL 有强烈抵触</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">啊这</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">因为传染性吗</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">这种抵触也包括 CC-BY-“SA” 这种玩意</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">我也不清楚为啥</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">就是感觉这种 无论如何都要保持 “代码自由” 而限制程序员自由的行为走不好</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">可能因为现在认知有限会这样</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">没有限制的自由就是不自由了属于是</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">反正我不习惯.gif</span><br><span class="line"></span><br><span class="line">Christine Ellenvia, [2022/11/18 B19:54]</span><br><span class="line">可能因为现在认知有限会这样</span><br></pre></td></tr></table></figure>
+
+<p>如果你点进了这篇文章，那么你大概率是知道 GNU 是什么的。如果你不知道，可以去 Google 补课一下再来。</p>
+<p>我对于 GNU 的态度一直是：你做我尊重，但我不去做。</p>
+<p>这大概和我的性格有关系——我不太愿意强制别人去做什么这样的。</p>
+<p>但要是只有这个的话，我也就不会写这篇文章了。</p>
+<h2 id="起源：您能不能别换协议了"><a href="#起源：您能不能别换协议了" class="headerlink" title="起源：您能不能别换协议了"></a>起源：您能不能别换协议了</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Moe🍥 23333, [2022/11/18 B10:06]</span><br><span class="line">草</span><br><span class="line"></span><br><span class="line">Moe🍥 23333, [2022/11/18 B10:06]</span><br><span class="line">我在翻 GNU 列出的 License 列表的时候</span><br><span class="line"></span><br><span class="line">Moe🍥 23333, [2022/11/18 B10:07]</span><br><span class="line">翻到个 Anti-996 License</span><br><span class="line"></span><br><span class="line">Moe🍥 23333, [2022/11/18 B10:07]</span><br><span class="line">https://directory.fsf.org/wiki/License:996</span><br></pre></td></tr></table></figure>
+
+<p>是的，就是那个 996.icu 做出来的协议。</p>
+<p>但是，GNU 对它的评价…有点微妙。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://directory.fsf.org/wiki/License:996">反对-996 许可证</a> (<a target="_blank" rel="noopener" href="https://www.gnu.org/licenses/license-list.html#Anti-996">#Anti-996</a>)</p>
+<p>这不是一个自由软件许可证。它 <a target="_blank" rel="noopener" href="https://www.gnu.org/philosophy/programs-must-not-limit-freedom-to-run.html">限制了自由软件允许按照用户意愿使用的自由。</a>。</p>
+<p>你的软件请不要使用此许可证。我们会避免使用以此许可证发布的软件，就像对待所有非自由软件一样。</p>
+</blockquote>
+<p>是的，他们认为这不是自由软件许可证，并且要我们（作者注：FSF 支持者）避免使用它。</p>
+<p>这就很耐人寻味了——</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Christine 高强度乐子分享, [2022/11/18 B19:39]</span><br><span class="line">其实还满讽刺。FSF 觉得专有软体是罪恶，其他就不是了。</span><br><span class="line">比如禁止用软件作恶是罪恶，禁止996公司使用软体是罪恶。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="二幕：你不觉得他们很疯癫吗？"><a href="#二幕：你不觉得他们很疯癫吗？" class="headerlink" title="二幕：你不觉得他们很疯癫吗？"></a>二幕：你不觉得他们很疯癫吗？</h2><p>我得说，是的。</p>
+<p>我确实很没法理解 FSF 到底想干什么。</p>
+<p>刚刚那条信息在发的时候我其实是比较昏沉的——所以你阅读可能有障碍。这里再展开解释一下：</p>
+<p>在我看来：</p>
+<blockquote>
+<ul>
+<li><p>FSF 认为只有专有软件是罪恶。</p>
+</li>
+<li><p>任何与专有无关的任何道义问题他们都不考虑。</p>
+</li>
+<li><p>比如说 JSON 协议要求不能使用这些开源项目“作恶”， Anti-996 协议要求必须在符合当地劳动法规的前提下才能使用。</p>
+</li>
+<li><p>他们就会跳出来指责你：</p>
+</li>
+<li><p>你这是限制软件自由！</p>
+</li>
+<li><p>殊不知更多人的自由在他们的指责下灰飞烟灭。</p>
+</li>
+</ul>
+</blockquote>
+<p>已经深夜 11:20 了。博主准备先去睡了。明天晚上再来看吧。</p>
+</div>
+  
+  <!-- 脚本文件 -->
+  <div id="waline" class="content markdown-body">
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  
+      init({
+        el: '#waline',
+        serverURL: 'https://c.api.christine.pp.ua',
+        dark: 'auto'
+      });  
+    </script>
+  </div>
+  
+</div>
+
+  <div class="markdown-footer">
+    
+    <a href="https://icp.gov.moe/?keyword=20227040" target="_blank">萌ICP备20227040号</a>
+    <br />
+    
+    <small>© <a href="/">Christine Ellenvia</a> - Powered By <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a> And <a target="_blank" rel="noopener" href="https://github.com/ChristineEllenvia/merryx">MerryX</a></small>
+  </div>
+</body>
+
+</html>
