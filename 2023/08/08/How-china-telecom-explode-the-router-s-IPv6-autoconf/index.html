@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>短篇简记：漠南蒙古电信如何通过错误的 DHCPv6-PD 炸掉你路由器上的 IPv6</title>
+  <meta name="description" content="[CE] 看起来还是有些人没见过世面，今天就来带大家见识一下什么叫做不合理的 DHCPv6。   你说它下发 IPv6 了吗？如发。  首先带大家复习一下 《关于推进IPv6技术演进和应用创新发展的实施意见》（工信部联通信〔2023〕45号）  … （三）加快IPv6基础设施演进发展 5.加快网络基础设施升级演进。基础电信企业面向行业数字化转型需求，加快骨干网、城域网、5G网络升级改造，基于分段">
+<meta property="og:type" content="article">
+<meta property="og:title" content="短篇简记：漠南蒙古电信如何通过错误的 DHCPv6-PD 炸掉你路由器上的 IPv6">
+<meta property="og:url" content="https://blog.christine.pp.ua/2023/08/08/How-china-telecom-explode-the-router-s-IPv6-autoconf/index.html">
+<meta property="og:site_name" content="Christine 自留地">
+<meta property="og:description" content="[CE] 看起来还是有些人没见过世面，今天就来带大家见识一下什么叫做不合理的 DHCPv6。   你说它下发 IPv6 了吗？如发。  首先带大家复习一下 《关于推进IPv6技术演进和应用创新发展的实施意见》（工信部联通信〔2023〕45号）  … （三）加快IPv6基础设施演进发展 5.加快网络基础设施升级演进。基础电信企业面向行业数字化转型需求，加快骨干网、城域网、5G网络升级改造，基于分段">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/CEllenvia/studious-octo-machine/master/pics/IMG_20221016_125507_148.jpg">
+<meta property="article:published_time" content="2023-08-08T13:21:33.000Z">
+<meta property="article:modified_time" content="2023-08-10T14:42:03.398Z">
+<meta property="article:author" content="Christine Ellenvia">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/CEllenvia/studious-octo-machine/master/pics/IMG_20221016_125507_148.jpg">
+  
+  
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/@waline/client@v2/dist/waline.css"
+  />
+  
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css/github-markdown.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Christine 自留地" type="application/atom+xml">
+</head>
+
+<body>
+  <div class="page">
+  <div class="title markdown-body">短篇简记：漠南蒙古电信如何通过错误的 DHCPv6-PD 炸掉你路由器上的 IPv6</div>
+  <div class="content markdown-body"><blockquote>
+<p>[CE] 看起来还是有些人没见过世面，今天就来带大家见识一下什么叫做不合理的 DHCPv6。</p>
+</blockquote>
+<blockquote>
+<p>你说它下发 IPv6 了吗？<strong>如发。</strong></p>
+</blockquote>
+<p>首先带大家复习一下 <strong>《关于推进IPv6技术演进和应用创新发展的实施意见》</strong>（工信部联通信〔2023〕45号）</p>
+<blockquote>
+<p>…</p>
+<p>（三）加快IPv6基础设施演进发展</p>
+<p>5.加快网络基础设施升级演进。基础电信企业面向行业数字化转型需求，加快骨干网、城域网、5G网络升级改造，基于分段路由、网络切片、随流检测、应用感知网络、服务功能链（SFC）等技术， <strong>提升企业专线、家庭宽带、移动终端等业务服务能力</strong>。开展“网络去NAT”专项行动，向互联网用户分配的IPv4私网地址加快退出。鼓励物联网平台、网关、模组等采用IPv6单栈部署，加强基于“IPv6+”的5G承载网研究和试点。强化IPv6在园区网络中的应用部署，在Wi-Fi 6&#x2F;7网络中全面使用IPv6技术。</p>
+<p>…</p>
+</blockquote>
+<p>但就这，他妈的中国电信居然还在用错误的 IPv6 配置，一用他妈就是长达一个练习时长…</p>
+<h2 id="先消消火气…"><a href="#先消消火气…" class="headerlink" title="先消消火气…"></a>先消消火气…</h2><p>我就可好奇，他妈用了两年半的 IPv6 错误配置他们是一下都不带发现的吗？</p>
+<p>中途他妈甚至换了一次光协议，结果 v6 支持他妈还是一样的恶心，</p>
+<p>你们就那么缺那点地址？发个 &#x2F;64？</p>
+<p>他妈的你看看正常运营商谁他妈下发 &#x2F;64 的不都得至少 &#x2F;60 来分</p>
+<p>你倒好，不想用 IPv6 就他妈直接说，别他妈整这点有的没的，一看就是为了完成 IPv6 部署而整点 IPv6。</p>
+<p>我日你妈的中国电信，给我赶紧毁灭得了，</p>
+<p><em>罗浮粗口</em>，<em>罗德岛粗口</em>，<em>VI粗口</em>，<em>地球粗口</em>。</p>
+<p><em>璃月粗口</em>，<em>蒙德粗口</em>，<em>〇〇粗口</em>，<em>混混粗口</em>。</p>
+<h2 id="你需要的前置知识-x2F-版权声明"><a href="#你需要的前置知识-x2F-版权声明" class="headerlink" title="你需要的前置知识&#x2F;版权声明"></a><a target="_blank" rel="noopener" href="https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/">你需要的前置知识&#x2F;版权声明</a></h2><p>Section 2.5.1 of <em>IP Version 6 Addressing Architecture</em>, RFC4291</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Full Copyright Statement</span><br><span class="line"></span><br><span class="line">   Copyright (C) The Internet Society (2006).</span><br><span class="line"></span><br><span class="line">   This document is subject to the rights, licenses and restrictions</span><br><span class="line">   contained in BCP 78, and except as set forth therein, the authors</span><br><span class="line">   retain all their rights.</span><br><span class="line"></span><br><span class="line">   This document and the information contained herein are provided on an</span><br><span class="line">   &quot;AS IS&quot; basis and THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS</span><br><span class="line">   OR IS SPONSORED BY (IF ANY), THE INTERNET SOCIETY AND THE INTERNET</span><br><span class="line">   ENGINEERING TASK FORCE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED,</span><br><span class="line">   INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE</span><br><span class="line">   INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED</span><br><span class="line">   WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure>
+
+<p>Section 6.3, 18.2.10.1 of <em>Dynamic Host Configuration Protocol for IPv6 (DHCPv6)</em>, RFC8415</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">Copyright Notice</span><br><span class="line"></span><br><span class="line">   Copyright (c) 2018 IETF Trust and the persons identified as the</span><br><span class="line">   document authors.  All rights reserved.</span><br><span class="line"></span><br><span class="line">   This document is subject to BCP 78 and the IETF Trust&#x27;s Legal</span><br><span class="line">   Provisions Relating to IETF Documents</span><br><span class="line">   (https://trustee.ietf.org/license-info) in effect on the date of</span><br><span class="line">   publication of this document.  Please review these documents</span><br><span class="line">   carefully, as they describe your rights and restrictions with respect</span><br><span class="line">   to this document.  Code Components extracted from this document must</span><br><span class="line">   include Simplified BSD License text as described in Section 4.e of</span><br><span class="line">   the Trust Legal Provisions and are provided without warranty as</span><br><span class="line">   described in the Simplified BSD License.</span><br><span class="line"></span><br><span class="line">   This document may contain material from IETF Documents or IETF</span><br><span class="line">   Contributions published or made publicly available before November</span><br><span class="line">   10, 2008.  The person(s) controlling the copyright in some of this</span><br><span class="line">   material may not have granted the IETF Trust the right to allow</span><br><span class="line">   modifications of such material outside the IETF Standards Process.</span><br><span class="line">   Without obtaining an adequate license from the person(s) controlling</span><br><span class="line">   the copyright in such materials, this document may not be modified</span><br><span class="line">   outside the IETF Standards Process, and derivative works of it may</span><br><span class="line">   not be created outside the IETF Standards Process, except to format</span><br><span class="line">   it for publication as an RFC or to translate it into languages other</span><br><span class="line">   than English.Copyright Notice</span><br><span class="line"></span><br><span class="line">   Copyright (c) 2018 IETF Trust and the persons identified as the</span><br><span class="line">   document authors.  All rights reserved.</span><br><span class="line"></span><br><span class="line">   This document is subject to BCP 78 and the IETF Trust&#x27;s Legal</span><br><span class="line">   Provisions Relating to IETF Documents</span><br><span class="line">   (https://trustee.ietf.org/license-info) in effect on the date of</span><br><span class="line">   publication of this document.  Please review these documents</span><br><span class="line">   carefully, as they describe your rights and restrictions with respect</span><br><span class="line">   to this document.  Code Components extracted from this document must</span><br><span class="line">   include Simplified BSD License text as described in Section 4.e of</span><br><span class="line">   the Trust Legal Provisions and are provided without warranty as</span><br><span class="line">   described in the Simplified BSD License.</span><br><span class="line"></span><br><span class="line">   This document may contain material from IETF Documents or IETF</span><br><span class="line">   Contributions published or made publicly available before November</span><br><span class="line">   10, 2008.  The person(s) controlling the copyright in some of this</span><br><span class="line">   material may not have granted the IETF Trust the right to allow</span><br><span class="line">   modifications of such material outside the IETF Standards Process.</span><br><span class="line">   Without obtaining an adequate license from the person(s) controlling</span><br><span class="line">   the copyright in such materials, this document may not be modified</span><br><span class="line">   outside the IETF Standards Process, and derivative works of it may</span><br><span class="line">   not be created outside the IETF Standards Process, except to format</span><br><span class="line">   it for publication as an RFC or to translate it into languages other</span><br><span class="line">   than English.</span><br></pre></td></tr></table></figure>
+
+<p>在处理完这些烦人的法律问题之后，让我们回来继续讨论刚刚我们提到的问题。</p>
+<h2 id="一个正常情况下的分配方式-RFC8415-6-3"><a href="#一个正常情况下的分配方式-RFC8415-6-3" class="headerlink" title="一个正常情况下的分配方式 (RFC8415-6.3)"></a>一个正常情况下的分配方式 (RFC8415-6.3)</h2><blockquote>
+<p>   Figure 1 illustrates a network architecture in which prefix<br>   delegation could be used.</p>
+<pre><code>                  ______________________         \
+                 /                      \         \
+                |    ISP core network    |         \
+                 \__________ ___________/           |
+                            |                       |
+                    +-------+-------+               |
+                    |  Aggregation  |               | ISP
+                    |    device     |               | network
+                    |  (delegating  |               |
+                    |    router)    |               |
+                    +-------+-------+               |
+                            |                      /
+                            |Network link to      /
+                            |subscriber premises /
+                            |
+                     +------+------+             \
+                     |     CPE     |              \
+                     | (requesting |               \
+                     |   router)   |                |
+                     +----+---+----+                |
+                          |   |                     | Subscriber
+   ---+-------------+-----+   +-----+------         | network
+      |             |               |               |
+ +----+-----+ +-----+----+     +----+-----+         |
+ |Subscriber| |Subscriber|     |Subscriber|        /
+ |    PC    | |    PC    |     |    PC    |       /
+ +----------+ +----------+     +----------+      /
+                Figure 1: Prefix Delegation Network
+</code></pre>
+<p>   In this example, the server (delegating router) is configured with a<br>   set of prefixes to be used for assignment to customers at the time of<br>   each customer’s first connection to the ISP service.  The prefix<br>   delegation process begins when the client (requesting router)<br>   requests configuration information through DHCP.  The DHCP messages<br>   from the client are received by the server in the aggregation device.<br>   When the server receives the request, it selects an available prefix<br>   or prefixes for delegation to the client.  The server then returns<br>   the prefix or prefixes to the client.<br>   The client subnets the delegated prefix and assigns the longer<br>   prefixes to links in the subscriber’s network.  In a typical scenario<br>   based on the network shown in Figure 1, the client subnets a single<br>   delegated &#x2F;48 prefix into &#x2F;64 prefixes and assigns one &#x2F;64 prefix to<br>   each of the links in the subscriber network.</p>
+</blockquote>
+<p>简单来说，就是用户端设备（请求路由器）发出一个 DHCPv6 请求到运营商设备（委派路由器），委派路由器会选择一个或者几个前缀发到请求设备上，然后由请求路由器来从这个前缀当中<strong>生成更长的前缀</strong>来下发到每个连接上。</p>
+<h2 id="但为啥要一个更长的前缀？-RFC8415-18-2-10-1"><a href="#但为啥要一个更长的前缀？-RFC8415-18-2-10-1" class="headerlink" title="但为啥要一个更长的前缀？(RFC8415-18.2.10.1)"></a>但为啥要一个更长的前缀？(RFC8415-18.2.10.1)</h2><blockquote>
+<p>When a client subnets a delegated prefix, it must assign additional bits to the prefix to generate unique, longer prefixes.</p>
+</blockquote>
+<p>这是 RFC 对 DHCPv6 客户端的要求。</p>
+<h2 id="所以你执念的-x2F-64-是个啥？-RFC4291-2-4-amp-2-5-4"><a href="#所以你执念的-x2F-64-是个啥？-RFC4291-2-4-amp-2-5-4" class="headerlink" title="所以你执念的 &#x2F;64 是个啥？ (RFC4291-2.4  &amp; 2.5.4)"></a>所以你执念的 &#x2F;64 是个啥？ (RFC4291-2.4  &amp; 2.5.4)</h2><blockquote>
+<p>   All Global Unicast addresses other than those that start with binary 000 have a 64-bit interface ID field (i.e., n + m &#x3D; 64), formatted as described in Section 2.5.1.  Global Unicast addresses that start with binary 000 have no such constraint on the size or structure of the interface ID field.</p>
+</blockquote>
+<blockquote>
+<p>The type of an IPv6 address is identified by the high-order bits of the address, as follows:</p>
+<pre><code>  Address type         Binary prefix        IPv6 notation   Section
+  ------------         -------------        -------------   -------
+  Unspecified          00...0  (128 bits)   ::/128          2.5.2
+  Loopback             00...1  (128 bits)   ::1/128         2.5.3
+  Multicast            11111111             FF00::/8        2.7
+  Link-Local unicast   1111111010           FE80::/10       2.5.6
+  Global Unicast       (everything else)
+</code></pre>
+</blockquote>
+<p>简单来说，就是除了 Unspecified，Loopback（回环）和 IPv4兼容的 IPv6 地址，所有的全球单播地址（最终分配到设备上的）全部要求是 64 位子前缀+64 位端口识别码</p>
+<hr>
+<p>但是由于中国电信傻逼般的操作，路由器拿到的都是一个 &#x2F;64 的前缀</p>
+<p>受到 RFC8415-18.2.10.1 限制，它必须尝试拿出一个比 &#x2F;64 还要小的前缀来分 （比如说 &#x2F;68）</p>
+<p>但是又受到 RFC4291-2.4 &amp; 2.5.4 限制，它不能那么做</p>
+<p>然后你就拿不到 IPv6 了。</p>
+<hr>
+<p><strong>结论：操你妈中国电信。</strong></p>
+</div>
+  
+  <!-- 脚本文件 -->
+  <div id="waline" class="content markdown-body">
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  
+      init({
+        el: '#waline',
+        serverURL: 'https://c.api.christine.pp.ua',
+        dark: 'auto'
+      });  
+    </script>
+  </div>
+  
+</div>
+
+  <div class="markdown-footer">
+    
+    <a href="https://icp.gov.moe/?keyword=20227040" target="_blank">萌ICP备20227040号</a>
+    <br />
+    
+    <small>© <a href="/">Christine Ellenvia</a> - Powered By <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a> And <a target="_blank" rel="noopener" href="https://github.com/ChristineEllenvia/merryx">MerryX</a></small>
+  </div>
+</body>
+
+</html>
